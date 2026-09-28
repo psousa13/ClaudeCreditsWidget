@@ -1,0 +1,14 @@
+<Window x:Class="ClaudeCreditsWidget.MessageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Style="{StaticResource DialogWindow}"
+        WindowStartupLocation="CenterScreen"
+        Title="Message" Width="300">
+    <StackPanel Margin="14,10,14,14">
+        <TextBlock x:Name="MessageText" TextWrapping="Wrap" Foreground="{StaticResource SubTextBrush}" Margin="0,0,0,14"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="CancelButton" Content="Cancel" Width="70" Margin="0,0,8,0" Click="Cancel_Click"/>
+            <Button x:Name="OkButton" Content="OK" MinWidth="70" Style="{StaticResource PrimaryButton}" Click="Ok_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

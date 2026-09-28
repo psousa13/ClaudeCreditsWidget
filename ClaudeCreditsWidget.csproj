@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RuntimeIdentifiers>win-arm64;win-x64</RuntimeIdentifiers>
+    <AssemblyName>ClaudeCreditsWidget</AssemblyName>
+    <RootNamespace>ClaudeCreditsWidget</RootNamespace>
+    <!-- Icon used for the .exe in Explorer / Start / shortcuts. Only applied once Assets\app.ico exists. -->
+    <ApplicationIcon Condition="Exists('Assets\app.ico')">Assets\app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup Condition="Exists('Assets\app.ico')">
+    <!-- Embedded so the tray icon can load it at runtime. -->
+    <Resource Include="Assets\app.ico" />
+  </ItemGroup>
+</Project>

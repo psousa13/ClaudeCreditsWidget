@@ -1,0 +1,68 @@
+<Window x:Class="ClaudeCreditsWidget.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Claude Credits Widget"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        Topmost="False"
+        ResizeMode="NoResize"
+        WindowStartupLocation="Manual"
+        FontFamily="{StaticResource BodyFont}"
+        FontSize="12"
+        Foreground="{StaticResource TextBrush}">
+    <Border Background="{StaticResource BgBrush}" CornerRadius="10" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2,0,0,8">
+                <TextBlock Text="✻" FontFamily="Segoe UI Symbol" FontSize="14" Foreground="{StaticResource AccentBrush}"
+                           Margin="0,0,6,0" VerticalAlignment="Center"/>
+                <TextBlock Text="Claude Credits" FontFamily="{StaticResource HeadingFont}" FontSize="14" FontWeight="Bold"
+                           Foreground="{StaticResource TextBrush}"/>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="AccountsList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                    BorderThickness="1" CornerRadius="8" Margin="0,0,0,8" Padding="10">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Email}" Foreground="{StaticResource TextBrush}" FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding StatusText}" Margin="0,4,0,8">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{StaticResource SubTextBrush}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsReady}" Value="True">
+                                                        <Setter Property="Foreground" Value="{StaticResource ReadyBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Start/Reset Timer" Margin="0,0,6,0"
+                                                Click="StartTimer_Click" Tag="{Binding}"/>
+                                        <Button Content="Remove" Click="Remove_Click" Tag="{Binding}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <Button Grid.Row="2" Content="Add Account" Style="{StaticResource PrimaryButton}"
+                    HorizontalAlignment="Stretch" Margin="0,2,0,0" Click="AddAccount_Click"/>
+        </Grid>
+    </Border>
+</Window>

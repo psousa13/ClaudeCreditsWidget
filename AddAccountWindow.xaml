@@ -1,0 +1,20 @@
+<Window x:Class="ClaudeCreditsWidget.AddAccountWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Style="{StaticResource DialogWindow}"
+        WindowStartupLocation="CenterScreen"
+        Title="Add Account" Width="300"
+        FocusManager.FocusedElement="{Binding ElementName=EmailBox}">
+    <StackPanel Margin="14,10,14,14">
+        <TextBlock Text="Email" Foreground="{StaticResource SubTextBrush}" Margin="0,0,0,4"/>
+        <TextBox x:Name="EmailBox" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Available at (24h, e.g. 16:00, optional)" Foreground="{StaticResource SubTextBrush}" Margin="0,0,0,4"/>
+        <TextBox x:Name="TimeBox" Margin="0,0,0,14"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancel" Width="70" Margin="0,0,8,0" Click="Cancel_Click"/>
+            <Button Content="Add" Width="70" Style="{StaticResource PrimaryButton}" Click="Add_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
