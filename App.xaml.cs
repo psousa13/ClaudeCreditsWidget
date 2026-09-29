@@ -43,12 +43,18 @@ public partial class App : Application
             if (info != null)
             {
                 using var stream = info.Stream;
-                return new Icon(stream, SystemInformation.SmallIconSize);
+                // Load without demanding an exact size match - some .ico files
+                // don't contain every size Windows asks for, which throws and
+                // silently falls back to the generic icon below.
+                using var ms = new System.IO.MemoryStream();
+                stream.CopyTo(ms);
+                ms.Position = 0;
+                return new Icon(ms);
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // No icon embedded yet - fall through.
+            System.Diagnostics.Debug.WriteLine($"Tray icon load failed: {ex}");
         }
 
         return SystemIcons.Application;

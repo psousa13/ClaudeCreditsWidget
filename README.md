@@ -1,141 +1,81 @@
-# ✻ Claude Credits Widget
+# Claude Credits Widget
 
-A fixed-position desktop widget for Windows that tracks your Claude accounts, each with its own live countdown to when credits should be back.
+A fixed-position desktop widget (.NET 8 WPF) for tracking Claude accounts by email, each with its own independent countdown to when credits should be available again.
 
-> Unofficial fan project. Not affiliated with or endorsed by Anthropic.
+## Requirements
 
-## Install
+1. .NET 8 SDK: https://dotnet.microsoft.com/download/dotnet/8.0
+2. Windows 11 on ARM64 (or x64 — both are supported)
 
-### 1. Clone the repo
+## Run it during development
 
-```powershell
-git clone https://github.com/<you>/<repo>.git
-cd <repo>\ClaudeCreditsWidget
+```
+cd ClaudeCreditsWidget
+dotnet run
 ```
 
-### 2. Install .NET 8 SDK
+## Build a standalone ARM64 .exe (no .NET runtime needed on the target machine)
 
-Download and install the **.NET 8 SDK** from https://dotnet.microsoft.com/download/dotnet/8.0
-
-Pick the installer that matches your PC (x64, x86 or Arm64). Then open a new PowerShell window and check it worked:
-
-```powershell
-dotnet --version
 ```
-
-It should print `8.x.x`.
-
-### 3. Compile the app
-
-Run the command that matches your machine from inside the `ClaudeCreditsWidget` folder.
-
-**Intel / AMD 64-bit (most PCs)**
-```powershell
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
-```
-
-**Intel / AMD 32-bit**
-```powershell
-dotnet publish -c Release -r win-x86 --self-contained true -p:PublishSingleFile=true
-```
-
-**ARM (Snapdragon, Surface Pro X, Windows on ARM)**
-```powershell
+cd ClaudeCreditsWidget
 dotnet publish -c Release -r win-arm64 --self-contained true -p:PublishSingleFile=true
 ```
 
-Not sure which one you have? Open **Settings → System → About** and check **System type**.
-
-### 4. Find the app
-
-Open the publish folder that matches the command you ran (swap `win-x64` for `win-x86` or `win-arm64`):
-
+The .exe will be in:
 ```
-ClaudeCreditsWidget\bin\Release\net8.0-windows\win-x64\publish\
+bin\Release\net8.0-windows\win-arm64\publish\ClaudeCreditsWidget.exe
 ```
 
-`ClaudeCreditsWidget.exe` is the app. Leave it in that folder.
+For an x64 machine instead, swap `win-arm64` for `win-x64`.
 
-### 5. Make a shortcut
+## What it is
 
-Right-click `ClaudeCreditsWidget.exe` → **Show more options** → **Create shortcut** (on Windows 10: **Create shortcut**).
+This behaves like an actual widget, not a normal window:
 
-### 6. Put the shortcut wherever you want
+1. No title bar, no borders, no close button, and it cannot be dragged around.
+2. It always opens at the same position and size, which you set once through a settings dialog (see below) — not by clicking and dragging.
+3. It lives on the desktop layer: it is always behind every other window (opening a window never puts it in front of them), and it does not show up in the taskbar or Alt-Tab.
 
-Move it to the Desktop, the Start menu, or the Startup folder to run at login. To open the Startup folder, press `Win + R`, type `shell:startup` and press Enter.
+Because the widget has no controls of its own besides the account list, everything else (adding accounts, changing position/size, exiting the app) lives in a tray icon.
 
-## Using it
+## Using the tray icon
 
-Look for the ✻ icon near the clock (click **^** if it's hidden). Right-click it to add accounts, change the widget's position, size and opacity, or exit.
+When the app is running, look for its icon near the clock in the bottom-right of your screen (click the small "^" arrow to show hidden icons if you don't see it). Right-click it for:
 
-## Note
+1. **Add Account** — same dialog as the button on the widget.
+2. **Widget Settings** — set exact position (X/Y), size (width/height), and opacity (0.1–1.0, for a semi-transparent look). Changes apply immediately and are saved.
+3. **Exit** — closes the app. This is the only way to close it.
 
-I made this project just because it was something I needed. It was largely coded by AI (vibe coding), so expect rough edges. Issues and suggestions are welcome.# ✻ Claude Credits Widget
+## Using the widget
 
-A fixed-position desktop widget for Windows that tracks your Claude accounts, each with its own live countdown to when credits should be back.
+1. Click "Add Account" (on the widget or from the tray) and enter the email. You can optionally set "Available at" to a clock time (24h, e.g. `16:00`) — the app works out how long that is from now on its own.
+2. Each account shows its own live countdown ("Xh Ym Zs remaining"). When it hits zero it turns green and reads "Credits should be back".
+3. "Start/Reset Timer" lets you (re)set an account's available-at time the same way.
+4. "Remove" deletes an account after confirmation.
+5. Data (accounts and widget position/size/opacity) is saved automatically to `%AppData%\ClaudeCreditsWidget\`, so everything persists between launches.
 
-> Unofficial fan project. Not affiliated with or endorsed by Anthropic.
+## Notes
 
-## Install
+- There's no public API to check a Claude account's actual credit status, so this tracks times you set yourself based on what Claude tells you.
+- To have it start automatically with Windows, create a shortcut to the published .exe and place it in `shell:startup` (Win+R, paste that, Enter).
 
-### 1. Clone the repo
+## App icon
 
-```powershell
-git clone https://github.com/<you>/<repo>.git
-cd <repo>\ClaudeCreditsWidget
-```
-
-### 2. Install .NET 8 SDK
-
-Download and install the **.NET 8 SDK** from https://dotnet.microsoft.com/download/dotnet/8.0
-
-Pick the installer that matches your PC (x64, x86 or Arm64). Then open a new PowerShell window and check it worked:
-
-```powershell
-dotnet --version
-```
-
-It should print `8.x.x`.
-
-### 3. Compile the app
-
-Run the command that matches your machine from inside the `ClaudeCreditsWidget` folder.
-
-**Intel / AMD 64-bit (most PCs)**
-```powershell
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
-```
-
-**Intel / AMD 32-bit**
-```powershell
-dotnet publish -c Release -r win-x86 --self-contained true -p:PublishSingleFile=true
-```
-
-**ARM (Snapdragon, Surface Pro X, Windows on ARM)**
-```powershell
-dotnet publish -c Release -r win-arm64 --self-contained true -p:PublishSingleFile=true
-```
-
-Not sure which one you have? Open **Settings → System → About** and check **System type**.
-
-### 4. Find the app
-
-Open the publish folder that matches the command you ran (swap `win-x64` for `win-x86` or `win-arm64`):
+Put your icon at:
 
 ```
-ClaudeCreditsWidget\bin\Release\net8.0-windows\win-x64\publish\
+ClaudeCreditsWidget\Assets\app.ico
 ```
 
-`ClaudeCreditsWidget.exe` is the app. Leave it in that folder.
+(next to `MainWindow.xaml`, in the `Assets` folder). Rebuild/publish and it is picked up automatically for:
 
-### 5. Make a shortcut
+1. the tray icon (notification area and the hidden-icons `^` overflow),
+2. the `.exe` file in Explorer, Start menu and any shortcuts (including the `shell:startup` one).
 
-Right-click `ClaudeCreditsWidget.exe` → **Show more options** → **Create shortcut** (on Windows 10: **Create shortcut**).
+The `.ico` should be a multi-size file containing 16, 20, 24, 32, 48, 64 and 256 px images so it stays sharp at every DPI. To make one from a PNG (square, ideally 256x256+):
 
-### 6. Put the shortcut wherever you want
+```
+magick icon.png -define icon:auto-resize=256,64,48,32,24,20,16 app.ico
+```
 
-Move it to the Desktop, the Start menu, or the Startup folder to run at login. To open the Startup folder, press `Win + R`, type `shell:startup` and press Enter.
-
-## Using it
-
-Look for the ✻ icon near the clock (click **^** if it's hidden). Right-click it to add accounts, change the widget's position, size and opacity, or exit.
+Windows caches icons; if the old one still shows, restart Explorer or rename the exe once.
