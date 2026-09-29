@@ -1,81 +1,154 @@
-# Claude Credits Widget
+<div align="center">
 
-A fixed-position desktop widget (.NET 8 WPF) for tracking Claude accounts by email, each with its own independent countdown to when credits should be available again.
+<img src="docs/banner.svg" alt="Claude Credits Widget" width="100%"/>
 
-## Requirements
+**A fixed-position desktop widget that tracks every Claude account you use, each with its own live countdown to when credits should be back.**
 
-1. .NET 8 SDK: https://dotnet.microsoft.com/download/dotnet/8.0
-2. Windows 11 on ARM64 (or x64 — both are supported)
+![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4?style=flat-square&logo=dotnet&logoColor=white)
+![WPF](https://img.shields.io/badge/UI-WPF-D97757?style=flat-square)
+![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?style=flat-square&logo=windows11&logoColor=white)
+![Arch](https://img.shields.io/badge/arch-x64%20%7C%20x86%20%7C%20ARM64-262624?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-86B37A?style=flat-square)
 
-## Run it during development
+[Download](../../releases) · [Build from source](#-build-from-source) · [Usage](#-usage)
 
+</div>
+
+---
+
+## ✻ Overview
+
+Running out of Claude usage on one account and switching to another gets confusing fast. **Claude Credits Widget** keeps a small, always-there list of your accounts on your desktop. Enter the time an account will be usable again and it counts down for you. When the timer hits zero the entry turns green.
+
+<div align="center">
+<img src="docs/preview.svg" alt="Widget preview" width="640"/>
+</div>
+
+## ✨ Features
+
+| | |
+|---|---|
+| 🪟 **True desktop widget** | No title bar, borders or close button. It stays behind all other windows and is hidden from the taskbar and Alt-Tab. |
+| ⏱️ **Independent timers** | One live countdown per account (`2h 14m 09s remaining`), turning green with *Credits should be back* at zero. |
+| 🕓 **Clock-time input** | Type a 24h time like `16:00` and the app works out the remaining time. If that time has already passed today, it rolls over to tomorrow. |
+| 🎛️ **Tray-controlled** | Add accounts, adjust settings, or exit from the notification-area icon. |
+| 📐 **Exact placement** | Set X/Y position, width, height and opacity (0.1–1.0) in a settings dialog. Changes apply immediately. |
+| 💾 **Persistent** | Accounts and layout are saved automatically and restored on launch. |
+| 🎨 **Claude-inspired dark theme** | Warm charcoal panels and terracotta accents, with custom-styled dialogs, sliders and scrollbars. |
+
+## 📥 Install
+
+1. Grab the zip for your machine from the [**Releases**](../../releases) page (see the table below).
+2. Unzip it and run `ClaudeCreditsWidget.exe`. No installer and no .NET runtime needed.
+3. Look for the ✻ icon near the clock (click **^** if it's hidden).
+
+| Your PC | Download |
+|---|---|
+| Intel / AMD 64-bit (most PCs) | `ClaudeCreditsWidget-win-x64.zip` |
+| Intel / AMD 32-bit | `ClaudeCreditsWidget-win-x86.zip` |
+| ARM (Snapdragon, Surface Pro X / 11, Windows on ARM VMs) | `ClaudeCreditsWidget-win-arm64.zip` |
+
+> Not sure which one you have? Open **Settings → System → About** and read **System type**.
+
+## 🕹️ Usage
+
+1. **Add Account**: use the button on the widget or the tray menu. Enter the email and, optionally, the time it will be available (24h, e.g. `16:00`).
+2. **Start/Reset Timer**: (re)set an account's available-at time at any time.
+3. **Remove**: deletes an account after confirmation.
+4. **Tray icon → Widget Settings**: move, resize and fade the widget.
+5. **Tray icon → Exit**: the only way to close the app.
+
+Run at login: press `Win + R`, enter `shell:startup`, and drop a shortcut to the `.exe` in that folder.
+
+Data lives in `%AppData%\ClaudeCreditsWidget\` (`accounts.json`, `widget-settings.json`).
+
+> **Heads up:** there is no public API for checking a Claude account's real credit status. The widget counts down to times **you** enter, based on what Claude tells you.
+
+## 🛠️ Build from source
+
+### Prerequisites
+
+- Windows 10 (1607+) or Windows 11. WPF is Windows-only.
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0). Pick the installer that matches your PC (x64, x86 or Arm64). Any of them can cross-compile for the others.
+
+```powershell
+git clone https://github.com/<you>/<repo>.git
+cd <repo>
 ```
+
+### Run in development
+
+```powershell
 cd ClaudeCreditsWidget
 dotnet run
 ```
 
-## Build a standalone ARM64 .exe (no .NET runtime needed on the target machine)
+### Build for every architecture at once
 
-```
-cd ClaudeCreditsWidget
-dotnet publish -c Release -r win-arm64 --self-contained true -p:PublishSingleFile=true
-```
-
-The .exe will be in:
-```
-bin\Release\net8.0-windows\win-arm64\publish\ClaudeCreditsWidget.exe
+```powershell
+.\build-all.ps1
 ```
 
-For an x64 machine instead, swap `win-arm64` for `win-x64`.
+This produces one zip per architecture in `dist\`. If PowerShell blocks the script, run it once with `powershell -ExecutionPolicy Bypass -File .\build-all.ps1`.
 
-## What it is
+### Build for a specific architecture
 
-This behaves like an actual widget, not a normal window:
+Run from the project folder (`ClaudeCreditsWidget`). Each command produces a single self-contained `.exe`.
 
-1. No title bar, no borders, no close button, and it cannot be dragged around.
-2. It always opens at the same position and size, which you set once through a settings dialog (see below) — not by clicking and dragging.
-3. It lives on the desktop layer: it is always behind every other window (opening a window never puts it in front of them), and it does not show up in the taskbar or Alt-Tab.
+| Target | Command |
+|---|---|
+| **x64**: Intel/AMD 64-bit | `dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true` |
+| **x86**: 32-bit | `dotnet publish -c Release -r win-x86 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true` |
+| **ARM64**: Windows on ARM | `dotnet publish -c Release -r win-arm64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true` |
 
-Because the widget has no controls of its own besides the account list, everything else (adding accounts, changing position/size, exiting the app) lives in a tray icon.
-
-## Using the tray icon
-
-When the app is running, look for its icon near the clock in the bottom-right of your screen (click the small "^" arrow to show hidden icons if you don't see it). Right-click it for:
-
-1. **Add Account** — same dialog as the button on the widget.
-2. **Widget Settings** — set exact position (X/Y), size (width/height), and opacity (0.1–1.0, for a semi-transparent look). Changes apply immediately and are saved.
-3. **Exit** — closes the app. This is the only way to close it.
-
-## Using the widget
-
-1. Click "Add Account" (on the widget or from the tray) and enter the email. You can optionally set "Available at" to a clock time (24h, e.g. `16:00`) — the app works out how long that is from now on its own.
-2. Each account shows its own live countdown ("Xh Ym Zs remaining"). When it hits zero it turns green and reads "Credits should be back".
-3. "Start/Reset Timer" lets you (re)set an account's available-at time the same way.
-4. "Remove" deletes an account after confirmation.
-5. Data (accounts and widget position/size/opacity) is saved automatically to `%AppData%\ClaudeCreditsWidget\`, so everything persists between launches.
-
-## Notes
-
-- There's no public API to check a Claude account's actual credit status, so this tracks times you set yourself based on what Claude tells you.
-- To have it start automatically with Windows, create a shortcut to the published .exe and place it in `shell:startup` (Win+R, paste that, Enter).
-
-## App icon
-
-Put your icon at:
+Output path (swap `win-x64` for your target):
 
 ```
-ClaudeCreditsWidget\Assets\app.ico
+bin\Release\net8.0-windows\win-x64\publish\ClaudeCreditsWidget.exe
 ```
 
-(next to `MainWindow.xaml`, in the `Assets` folder). Rebuild/publish and it is picked up automatically for:
+### Smaller, framework-dependent builds
 
-1. the tray icon (notification area and the hidden-icons `^` overflow),
-2. the `.exe` file in Explorer, Start menu and any shortcuts (including the `shell:startup` one).
+If the target machine already has the [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) installed, use `--self-contained false` for a much smaller file:
 
-The `.ico` should be a multi-size file containing 16, 20, 24, 32, 48, 64 and 256 px images so it stays sharp at every DPI. To make one from a PNG (square, ideally 256x256+):
-
+```powershell
+dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true
 ```
+
+### Architecture notes
+
+- **32-bit ARM (`win-arm`) is not supported.** .NET 8 doesn't provide a WPF runtime for it, and Windows on ARM devices today run ARM64 (which can also run x64 and x86 apps through emulation).
+- An x64 build runs on ARM64 Windows 11 through emulation, but the native `win-arm64` build is faster and lighter.
+- Build one architecture at a time with `dotnet clean` in between if MSBuild reuses stale output.
+
+### App icon
+
+Place a multi-size icon at `ClaudeCreditsWidget\Assets\app.ico` (16, 20, 24, 32, 48, 64 and 256 px). It is picked up automatically for the tray icon and the `.exe`. To make one from a PNG:
+
+```powershell
 magick icon.png -define icon:auto-resize=256,64,48,32,24,20,16 app.ico
 ```
 
-Windows caches icons; if the old one still shows, restart Explorer or rename the exe once.
+## 🗂️ Project layout
+
+```
+ClaudeCreditsWidget/
+├── App.xaml(.cs)            # Theme, shared dialog style, tray icon
+├── MainWindow.xaml(.cs)     # The desktop widget
+├── AddAccountWindow.*       # Add-account dialog
+├── StartTimerWindow.*       # Set/reset timer dialog
+├── SettingsWindow.*         # Position / size / opacity
+├── MessageWindow.*          # Themed message boxes
+├── Models/                  # AccountEntry, WidgetSettings
+└── Services/StorageService  # JSON persistence in %AppData%
+```
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome. If the app crashes, please attach the `crash.log` and your Windows version and architecture.
+
+## 📄 License
+
+MIT. Add a `LICENSE` file to your repo to match the badge.
+
+<sub>Unofficial fan project. Not affiliated with or endorsed by Anthropic. "Claude" is a trademark of Anthropic.</sub>
