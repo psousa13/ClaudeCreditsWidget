@@ -81,6 +81,6 @@ Move it to the Desktop, the Start menu, or the Startup folder to run at login. T
 - There is no public API for checking a Claude account's real credit status. The widget counts down to times **you** enter.
 - Data is stored in `%AppData%\ClaudeCreditsWidget\`.
 - 32-bit ARM (`win-arm`) is not supported.
-- This project was largely coded by AI (vibe coding), so expect rough edges. Issues and suggestions are welcome. If the app crashes, please attach `crash.log` and your Windows version and architecture.
+- This project was something that i needed, so its largely coded by AI (vibe coding), so expect rough edges. Issues and suggestions are welcome. If the app crashes, please attach `crash.log` and your Windows version and architecture.
 
 **License:** MIT
